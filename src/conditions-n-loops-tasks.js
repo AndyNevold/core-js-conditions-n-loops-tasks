@@ -224,8 +224,23 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  for (let i = 0; i < arr.length; i += 1) {
+    let leftSum = 0;
+    let rightSum = 0;
+    for (let j = 0; j < arr.length; j += 1) {
+      if (j < i) {
+        leftSum += arr[j];
+      }
+      if (j > i) {
+        rightSum += arr[j];
+      }
+    }
+    if (leftSum === rightSum) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 /**
@@ -249,8 +264,56 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  let top = 0;
+  let bottom = size - 1;
+  let left = 0;
+  let right = size - 1;
+  let i = 0;
+  let j = 0;
+  const result = [];
+
+  for (let k = 0; k < size; k += 1) {
+    result[k] = Array(size);
+  }
+  let value = 1;
+
+  for (let n = 0; n < result.length * size; n += 1) {
+    if (top > bottom) break;
+    top += 1;
+
+    for (; j < right; j += 1) {
+      result[i][j] = value;
+      value += 1;
+    }
+    if (right < left) break;
+    right -= 1;
+
+    for (; i < bottom; i += 1) {
+      result[i][j] = value;
+      value += 1;
+    }
+
+    if (bottom < top) break;
+    bottom -= 1;
+
+    for (; j > left; j -= 1) {
+      result[i][j] = value;
+      value += 1;
+    }
+
+    if (left > right) break;
+    left += 1;
+
+    for (; i > top; i -= 1) {
+      result[i][j] = value;
+      value += 1;
+    }
+  }
+
+  result[i][j] = value;
+  value += 1;
+  return result;
 }
 
 /**
@@ -268,8 +331,28 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const matrixTemp = new Array(matrix.length);
+  const resultMatrix = matrix;
+
+  for (let i = 0; i < matrix.length; i += 1) {
+    matrixTemp[i] = new Array(matrix.length);
+  }
+
+  for (let i = 0; i <= matrix.length - 1; i += 1) {
+    let step = matrix.length - 1;
+    for (let j = 0; j <= matrix[i].length - 1; j += 1) {
+      matrixTemp[i][j] = matrix[step][i];
+      step -= 1;
+    }
+  }
+
+  for (let i = 0; i <= matrix.length - 1; i += 1) {
+    for (let j = 0; j <= matrix[i].length - 1; j += 1) {
+      resultMatrix[i][j] = matrixTemp[i][j];
+    }
+  }
+  return resultMatrix;
 }
 
 /**

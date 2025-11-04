@@ -121,8 +121,32 @@ function isIsoscelesTriangle(a, b, c) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  const romanArr = [
+    ['M', 1000],
+    ['CM', 900],
+    ['D', 500],
+    ['CD', 400],
+    ['C', 100],
+    ['XC', 90],
+    ['L', 50],
+    ['XL', 40],
+    ['X', 10],
+    ['IX', 9],
+    ['V', 5],
+    ['IV', 4],
+    ['I', 1],
+  ];
+  let roman = '';
+  let numTemp = num;
+
+  for (let index = 0; index < romanArr.length; index += 1) {
+    while (numTemp >= romanArr[index][1]) {
+      roman += romanArr[index][0];
+      numTemp -= romanArr[index][1];
+    }
+  }
+  return roman;
 }
 
 /**
@@ -140,8 +164,59 @@ function convertToRomanNumerals(/* num */) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+function convertNumberToString(numberStr) {
+  let resultTemp = '';
+
+  for (let i = 0; i < numberStr.length; i += 1) {
+    switch (numberStr[i]) {
+      case '0':
+        resultTemp += ' zero';
+        break;
+      case '1':
+        resultTemp += ' one';
+        break;
+      case '2':
+        resultTemp += ' two';
+        break;
+      case '3':
+        resultTemp += ' three';
+        break;
+      case '4':
+        resultTemp += ' four';
+        break;
+      case '5':
+        resultTemp += ' five';
+        break;
+      case '6':
+        resultTemp += ' six';
+        break;
+      case '7':
+        resultTemp += ' seven';
+        break;
+      case '8':
+        resultTemp += ' eight';
+        break;
+      case '9':
+        resultTemp += ' nine';
+        break;
+      case ',':
+      case '.':
+        resultTemp += ' point';
+        break;
+      case '-':
+        resultTemp += ' minus';
+        break;
+      default:
+        break;
+    }
+  }
+
+  let result = '';
+  for (let i = 1; i < resultTemp.length; i += 1) {
+    result += resultTemp[i];
+  }
+
+  return result;
 }
 
 /**
@@ -369,8 +444,46 @@ function rotateMatrix(matrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const result = arr;
+
+  function part(array, left, right) {
+    const arrTemp = array;
+    const pivot = arrTemp[Math.floor((right + left) / 2)];
+    let i = left;
+    let j = right;
+    while (i <= j) {
+      while (arrTemp[i] < pivot) {
+        i += 1;
+      }
+      while (arrTemp[j] > pivot) {
+        j -= 1;
+      }
+      if (i <= j) {
+        const temp = arrTemp[i];
+        arrTemp[i] = arrTemp[j];
+        arrTemp[j] = temp;
+        i += 1;
+        j -= 1;
+      }
+    }
+    return i;
+  }
+
+  function sortArr(arrBySort, left, right) {
+    let index;
+    if (arrBySort.length > 1) {
+      index = part(arrBySort, left, right);
+      if (left < index - 1) {
+        sortArr(arrBySort, left, index - 1);
+      }
+      if (index < right) {
+        sortArr(arrBySort, index, right);
+      }
+    }
+    return arrBySort;
+  }
+  return sortArr(result, 0, result.length - 1);
 }
 
 /**
@@ -390,8 +503,30 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let step = iterations;
+  let resultStr = str;
+
+  for (let index = 1; index <= step; index += 1) {
+    let leftSide = '';
+    let rightSide = '';
+
+    for (let i = 0; i < str.length; i += 1) {
+      if (i % 2 === 0) {
+        leftSide += resultStr[i];
+      } else {
+        rightSide += resultStr[i];
+      }
+    }
+
+    resultStr = leftSide + rightSide;
+
+    if (resultStr === str) {
+      step = iterations % index;
+      index = 0;
+    }
+  }
+  return resultStr;
 }
 
 /**
@@ -412,8 +547,34 @@ function shuffleChar(/* str, iterations */) {
  * 321321   => 322113
  *
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const arr = [...String(number)];
+
+  let index;
+  let delElem;
+
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    if (arr[i] > arr[i - 1]) {
+      index = i;
+      break;
+    }
+  }
+
+  const [leftSide, rightSide] = [
+    [...arr].splice(0, index - 1).map((el) => +el),
+    [...arr]
+      .splice(index - 1)
+      .map((el) => +el)
+      .sort((a, b) => a - b),
+  ];
+
+  for (let j = 0; j < rightSide.length; j += 1) {
+    if (rightSide[j] === +arr[index - 1] && rightSide[j] !== rightSide[j + 1]) {
+      delElem = rightSide.splice(j + 1, 1);
+      break;
+    }
+  }
+  return +[...leftSide, ...delElem, ...rightSide].join('');
 }
 
 module.exports = {
